@@ -5,8 +5,8 @@
 ;; Author: Mehmet Tekman
 ;; URL: https://github.com/mtekman/elisp-depmap.el
 ;; Keywords: outlines
-;; Package-Requires: ((emacs "26.1") (dash "2.17.0"))
-;; Version: 0.1
+;; Package-Requires: ((emacs "26.1"))
+;; Version: 0.2
 
 ;;; License:
 
@@ -26,7 +26,7 @@
 
 ;;; Code:
 (defcustom elisp-depmap-exec-file "~/graphviz2.dot" ;
-  "Location of dot file.  The output image file will use the prefix before the extension."
+  "Location of dot file.  The output image file uses the prefix before the ext."
   :type 'string
   :group 'elisp-depmap)
 

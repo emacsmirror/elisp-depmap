@@ -5,8 +5,8 @@
 ;; Author: Mehmet Tekman
 ;; URL: https://github.com/mtekman/elisp-depmap.el
 ;; Keywords: outlines
-;; Package-Requires: ((emacs "26.1") (dash "2.17.0"))
-;; Version: 0.1
+;; Package-Requires: ((emacs "26.1"))
+;; Version: 0.2
 
 ;;; License:
 
@@ -27,10 +27,6 @@
 ;;; Code:
 (require 'cl-lib)
 (require 'dash)
-
-(defgroup elisp-depmap nil
-  "Main group for elisp-depmap package."
-  :group 'coding)
 
 (defcustom elisp-depmap-secondhelp-regexreferences
   "\\( \\|(\\|\\b\\|'\\)%s\\( \\|)\\|\\b\\)"
@@ -63,7 +59,7 @@ This will be used to scan all files for top level definitions."
           (car func)))))
 
 (defun elisp-depmap-secondhelp--makesortedlinelist (hashtable)
-  "Make an ascending list of the start and end positions of all functions from HASHTABLE."
+  "Make ascending list of start and end positions of functions from HASHTABLE."
   (let ((funcsbylinenum nil))
     (maphash
      (lambda (nam vals)
@@ -77,7 +73,8 @@ This will be used to scan all files for top level definitions."
     (--sort (< (car it) (car other)) funcsbylinenum)))
 
 (defun elisp-depmap-secondhelp--updatementionslist (vname file annotations funcs-by-line-asc)
-  "Update mentions list from ANNOTATIONS for variable VNAME by checking in ASCLIST of line numbers for function bounds in FILE."
+  "Update mentions list from ANNOTATIONS for variable VNAME.
+Check VNAME in ASCLIST of line numbers for function bounds in FILE."
   (let ((vnam-regex (format elisp-depmap-secondhelp-regexreferences vname))
         (mentionlst (plist-get annotations :mentions))
         (vnam-line (plist-get annotations :line-beg)))

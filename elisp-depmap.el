@@ -5,8 +5,8 @@
 ;; Author: Mehmet Tekman
 ;; URL: https://github.com/mtekman/elisp-depmap.el
 ;; Keywords: outlines
-;; Package-Requires: ((emacs "26.1") (dash "2.17.0"))
-;; Version: 0.1
+;; Package-Requires: ((emacs "26.1"))
+;; Version: 0.2
 
 ;;; License:
 
@@ -32,6 +32,10 @@
 
 (require 'org-table)
 (require 'subr-x)
+
+(defgroup elisp-depmap nil
+  "Main group for elisp-depmap package."
+  :group 'coding)
 
 ;;;###autoload
 (defun elisp-depmap-makesummarytable ()
@@ -99,7 +103,7 @@ If SHUFFLE gives a random seed (default 0) to shuffle subgraph cluster layouts."
 
 ;;;###autoload
 (defun elisp-depmap-graphviz ()
-  "Make a very basic dot file representation of all the top level definitions in a project, and their references."
+  "Make basic dot file of top level definitions and their references."
   (interactive)
   (let ((hashtable (elisp-depmap-parse--generatemap)))
     (let ((filemap (elisp-depmap-graph--makefilemapcolors hashtable))

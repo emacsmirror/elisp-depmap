@@ -5,8 +5,8 @@
 ;; Author: Mehmet Tekman
 ;; URL: https://github.com/mtekman/elisp-depmap.el
 ;; Keywords: outlines
-;; Package-Requires: ((emacs "26.1") (dash "2.17.0"))
-;; Version: 0.1
+;; Package-Requires: ((emacs "26.1"))
+;; Version: 0.2
 
 ;;; License:
 
@@ -53,7 +53,9 @@
     ((bgcolor . grey70) (fontcolor . black) (fontsize . 25.0) (fontname . "\"times bold\""))
     :subsubgraph
     ((bgcolor . white) (fontcolor . black) (fontsize . 12.0) (margin . 10)))
-  "Attributes to give to the main :edge, :node, :graph, the :subgraph (file clusters), and the nested clusters :subsubgraph (groups defined by `elisp-depmap-parse-subclustergroups')."
+  "Attributes to give to :edge, :node, :graph, the :subgraph, and :subsubgraph.
+Subgraph represent (file clusters), and the nested clusters :subsubgraph (groups
+defined by `elisp-depmap-parse-subclustergroups')."
   :type 'plist
   :group 'elisp-depmap)
 
@@ -62,21 +64,25 @@
     (gray . "ᛝ") (green . "ᛢ") (yellow . "ᛪ") (pink . "ᛯ") (brown . "ᛸ")
     (navy . "ᛒ") (maroon . "ᚷ") (violet . "ᚫ") (brown . "ᚣ") (cornflowerblue . "ŧ")
     (darkslategray4 . "Ω")(firebrick . "Æ") (goldenrod4 . "þ"))
-  "Alist of colors and symbols used to style and prefix files.  More colors can be found at the https://www.graphviz.org/doc/info/colors.html website."
+  "Alist of colors and symbols used to style and prefix files.
+More colors at the https://www.graphviz.org/doc/info/colors.html website."
   :type 'alist
   :group 'elisp-depmap)
 
 (defcustom elisp-depmap-graph-subclustergroups
   '(:variables (setq defvar defcustom) :functions (defun defsubst defmacro))
   "Define subcluster groups and the which symbols should be assigned to them.
-By default we only have variables and functions, though any number of groups can be defined.  It is not necessary to use all symbols from the `elisp-depmap-parse-function-shapes' variable."
+By default we only have variables and functions, though any number of groups
+can be defined.  It is not necessary to use all symbols from the
+ `elisp-depmap-parse-function-shapes' variable."
   :type 'plist
   :group 'elisp-depmap)
 
 
 (defun elisp-depmap-graph--decorate (keyword &optional indent)
   "Generate format string for KEYWORD from `elisp-depmap-graph-decorate'.
-If INDENT is nil, all properties are inlined into square brackets, otherwise each property is seperated by a newline followed by the INDENT amount in spaces."
+If INDENT is nil, all properties are inlined into square brackets, otherwise
+each property is seperated by a newline followed by the INDENT amount in spaces."
   (let ((func-lay (lambda (x) (format "%s=%s" (car x) (cdr x))))
         (keyw-lst (plist-get elisp-depmap-graph-decorate keyword))
         (inds-spc (if indent (make-string indent ? ) "")))
@@ -92,7 +98,7 @@ If INDENT is nil, all properties are inlined into square brackets, otherwise eac
                    (hash-table-values hashtable))))
 
 (defun elisp-depmap-graph--makefilemapcolors (hashtable)
-  "From the HASHTABLE make a plist of file, cluster no, and color for each file."
+  "From HASHTABLE make a plist of file, cluster no, and color for each file."
   (let ((colors (mapcar #'car elisp-depmap-graph-filecolorsymbols))
         (symbls (mapcar #'cdr elisp-depmap-graph-filecolorsymbols))
         (files-uniq (elisp-depmap-graph--filesuniq hashtable)))
@@ -104,7 +110,8 @@ If INDENT is nil, all properties are inlined into square brackets, otherwise eac
            (number-sequence 0 (1- (length files-uniq))))))
 
 (defun elisp-depmap-graph--newname (functionname filename &optional symbol)
-  "Strip the projectname from FUNCTIONNAME, or use the FILENAME as the prefix to strip off.  If SYMBOL, use that as replacement."
+  "Strip either the projectname or the FILENAME prefix from FUNCTIONNAME.
+If SYMBOL, use that as replacement."
   (let* ((prool (car (split-string filename "\\.el")))
          (pregx (format "^%s" prool)))
     (if elisp-depmap-graph-stripprojectname
@@ -112,7 +119,9 @@ If INDENT is nil, all properties are inlined into square brackets, otherwise eac
       functionname)))
 
 (defun elisp-depmap-graph--makesubsubgraph (hashtable funcmap entry subg ind)
-  "Make a sub subgraph for file ENTRY info using the SUBG keyword from `elisp-depmap-graph-subclustergroups' from HASHTABLE.  Use FUNCMAP for shapes, and use IND to set the indent number."
+  "Make a sub subgraph for file ENTRY info using the SUBG keyword.
+The SUBG keyword from `elisp-depmap-graph-subclustergroups' from HASHTABLE.
+Use FUNCMAP for shapes, and use IND to set the indent number."
   (let ((vfile (plist-get entry :file))
         ;;(color (plist-get entry :color))
         (clust (plist-get entry :clust))
@@ -152,7 +161,8 @@ If INDENT is nil, all properties are inlined into square brackets, otherwise eac
 
 (defun elisp-depmap-graph--makedigraphgroups (hashtable filemap funcmap ind)
   "Make digraph subgraphs for each file cluster, using files from HASHTABLE.
-Decorate them using colors from FILEMAP and shapes from FUNCMAP.  Set indent by IND amount."
+Decorate them using colors from FILEMAP and shapes from FUNCMAP.
+Set indent by IND amount."
   (let* ((next-ind (+ ind elisp-depmap-graph-indentwidth))
          (ind-prev (make-string ind ? ))
          (ind-next (make-string next-ind ? )))
@@ -205,7 +215,7 @@ Decorate them using colors from FILEMAP and shapes from FUNCMAP.  Set indent by 
 
 
 (defun elisp-depmap-graph--makedigraphcrossinglinks (hashtable filemap ind)
-  "Make the digraph connections across clusters, using functions from HASHTABLE, and FILEMAP info.  Indent by IND amount."
+  "Make digraph across clusters from HASHTABLE and FILEMAP, with IND indent."
   (let ((indent (make-string ind ? )))
     (maphash
      (lambda (funcname info)

@@ -5,8 +5,8 @@
 ;; Author: Mehmet Tekman
 ;; URL: https://github.com/mtekman/elisp-depmap.el
 ;; Keywords: outlines
-;; Package-Requires: ((emacs "26.1") (dash "2.17.0"))
-;; Version: 0.1
+;; Package-Requires: ((emacs "26.1"))
+;; Version: 0.2
 
 ;;; License:
 
@@ -85,7 +85,8 @@ More info at the https://graphviz.org/doc/info/attrs.html website."
 
 (defun elisp-depmap-parse--alltopdefs-file (file hashdefs)
   "Get all top definitions in FILE and put into HASHDEFS.
-Don't use `grep' or `projectile-ripgrep', because those sonuvabitch finish hooks are not reliable."
+Don't use `grep' or `projectile-ripgrep', because those sonuvabitch finish
+hooks are not reliable."
   (with-current-buffer (find-file-noselect file)
     (save-excursion
       (goto-char 0)
@@ -124,7 +125,8 @@ Don't use `grep' or `projectile-ripgrep', because those sonuvabitch finish hooks
 
 
 (defun elisp-depmap-parse--alltopdefs-filelist (filelist)
-  "Get all top definitions from FILELIST and return a hashtable, with variable names as keys as well as type and bounds as values."
+  "Get all top definitions from FILELIST and return a hashtable.
+With variable names as keys as well as type and bounds as values."
   (let ((hashtable (make-hash-table
                     :size elisp-depmap-parse-hashtablesize
                     :test #'equal)))
@@ -135,7 +137,8 @@ Don't use `grep' or `projectile-ripgrep', because those sonuvabitch finish hooks
 
 
 (defun elisp-depmap-parse--allsecondarydefs-file (file hashtable)
-  "Get all secondary definitions in FILE for each of the top level definitions in HASHTABLE."
+  "Get all secondary definitions in FILE.
+For each of the top level definitions in HASHTABLE."
   (let ((funcs-by-line-asc (elisp-depmap-secondhelp--makesortedlinelist
                             hashtable)))
     ;; -- Check each top def in the buffer
@@ -150,7 +153,8 @@ Don't use `grep' or `projectile-ripgrep', because those sonuvabitch finish hooks
 
 
 (defun elisp-depmap-parse--allsecondarydefs-filelist (filelist hashtable)
-  "Get all secondary definitions for all files in FILELIST for the top level definitions in HASHTABLE."
+  "Get all secondary definitions for all files in FILELIST.
+For the top level definitions in HASHTABLE."
   (dolist (pfile filelist hashtable)
     (elisp-depmap-parse--allsecondarydefs-file pfile hashtable)))
 
