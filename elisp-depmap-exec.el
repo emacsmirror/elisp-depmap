@@ -5,7 +5,7 @@
 ;; Author: Mehmet Tekman
 ;; URL: https://github.com/mtekman/elisp-depmap.el
 ;; Keywords: outlines
-;; Package-Requires: ((emacs "26.1") (dash "2.20.0"))
+;; Package-Requires: ((emacs "26.1"))
 ;; Version: 0.2.1
 
 ;;; License:
